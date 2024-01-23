@@ -1,13 +1,17 @@
 <script>
-	import { tick } from 'svelte';
+	import { tick, beforeUpdate } from 'svelte';
 	import Svelecte from 'svelecte';
 	import {
 		getUniqueObjectValues,
 		calculateDevices,
 		sortObjectValuesAsc,
 		getVersionOptions,
-		getCountryOptions
+		getCountryOptions,
+		sortVersions,
+		calculateDaysPercentage
 	} from '$lib/helpers/helperFunctions';
+	import Table from '$lib/components/Table.svelte'
+	import Chart from '$lib/components/Chart.svelte'
 
 	const optionGameAll = {
 		app_id: 'game_all',
@@ -23,12 +27,16 @@
 		name: 'All'
 	};
 
+	const CHART_VIEW = 'chart';
+	const TABLE_VIEW = 'table';
+
 	export let data;
 	let { games, retention } = data;
 
 	let selectedGame = optionGameAll;
 	let selectedVersion = optionVersionAll;
 	let selectedCountry = optionCountryAll;
+	let dataView = CHART_VIEW;
 
 	const allGameIds = games.map((game) => game.app_id);
 	$: gameIdsToFilterBy =
@@ -108,6 +116,31 @@
 			/> ${name}`;
 		}
 	};
+
+	const getDataToDisplay = (data) => {
+		const sorted = sortVersions(data, "app_ver");
+		const calculated = sorted.map((item) => {
+			return {
+				...item,
+				days: calculateDaysPercentage(item.days)
+			}
+		});
+
+		return calculated;
+	}
+
+	$: filteredRetentionData = retention.filter(item => {
+		return gameIdsToFilterBy.includes(item.app_id)
+		&& versionsToFilterBy.includes(item.app_ver)
+		&& countriesToFilterBy.includes(item.country);
+	})
+
+	$: dataToDisplay = getDataToDisplay(filteredRetentionData)
+
+	// beforeUpdate(() => 
+	// 	console.log('updated')
+	// )
+
 </script>
 
 <div>
@@ -151,9 +184,23 @@
 </div>
 
 <div>
-	<h2>VIEW BAR - table or graph option</h2>
+	<h2>VIEW BAR - table or chart option</h2>
+	<button on:click={() => dataView = TABLE_VIEW}>Table</button>
+	<button on:click={() => dataView = CHART_VIEW}>Chart</button>
+	<p>Showing: {dataView}</p>
 </div>
 
 <div>
-	<h2>CONTENT - table or graph itself</h2>
+	<h2>CONTENT</h2>
+	{#if dataView === TABLE_VIEW}
+		<Table 
+			retention={dataToDisplay}
+			multipleGamesSelected={selectedGame.app_id === optionGameAll.app_id}
+		/>
+	{:else}
+		<Chart 
+			retention={dataToDisplay}
+			multipleGamesSelected={selectedGame.app_id === optionGameAll.app_id}
+		/>
+	{/if}
 </div>

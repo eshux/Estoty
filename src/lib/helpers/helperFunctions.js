@@ -28,12 +28,12 @@ const convertVersionIntoDecimal = (version) => {
 }
 
 // Sorts versions in descending order
-const sortVersions = (array) => {
+export const sortVersions = (array, key) => {
   const clone = JSON.parse(JSON.stringify(array));
 
   clone.sort((a, b) => {
-    const decimalA = convertVersionIntoDecimal(a);
-    const decimalB = convertVersionIntoDecimal(b);
+    const decimalA = convertVersionIntoDecimal(key ? a[key] : a);
+    const decimalB = convertVersionIntoDecimal(key ? b[key] : b);
     return decimalB - decimalA
   })
 
@@ -52,7 +52,7 @@ const sortCountries = (array, devices) => {
 }
 
 // Group by object key
-const groupBy = (array, key) => {
+export const groupBy = (array, key) => {
   const grouped = array.reduce((acc, curr) => {
     const keyName = curr[key];
     (acc[keyName] = acc[keyName] || []).push(curr);
@@ -73,6 +73,12 @@ export const calculateDevices = (array, key) => {
 
   return grouped;
 }
+
+export const calculateDaysPercentage = (days) => {
+  const divider = days[0];
+  const calculatedDays = days.map((day) => Math.round((day / divider) * 100));
+  return calculatedDays;
+};
 
 const convertToSelectOptions = (array) => {
   return array.map(item => {
