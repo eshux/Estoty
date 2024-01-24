@@ -3,7 +3,6 @@
 	import { groupBy } from '$lib/helpers/helperFunctions';
 
 	export let retention;
-	export let multipleGamesSelected;
 	const indexes = [0, 5, 10, 20, 25, 30, 60, 90];
 
 	const getChartData = (rawData) => {
@@ -59,6 +58,16 @@
 							return label;
 						}
 					}
+				},
+				legend: {
+					position: 'right',
+					title: {
+						display: true,
+						text: "Versions",
+						font: {
+							size: 14
+						}
+					}
 				}
 			}
 		}
@@ -79,20 +88,12 @@
 	};
 </script>
 
-<div class="">
-	{#if multipleGamesSelected}
-		<p>
-			Multiple Games are selected - you might see some version and country duplicates, but each of them
-			represents a different game
-		</p>
-	{/if}
-
+<div>
 	<canvas use:handleChart={chartConfig} class="chart"></canvas>
 </div>
 
 <style>
 	.chart {
-		max-width: 800px;
-		max-height: 500px;
+		max-height: 600px;
 	}
 </style>

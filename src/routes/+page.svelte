@@ -1,9 +1,15 @@
 <script>
-	import { getUniqueObjectValues, sortVersions, calculateDaysPercentage } from '$lib/helpers/helperFunctions';
+	import {
+		getUniqueObjectValues,
+		sortVersions,
+		calculateDaysPercentage
+	} from '$lib/helpers/helperFunctions';
 	import { OPTION_ALL } from '$lib/helpers/data';
 	import Table from '$lib/components/Table.svelte';
 	import Chart from '$lib/components/Chart.svelte';
 	import Filters from '$lib/components/Filters.svelte';
+	import Button from '$lib/components/Button.svelte';
+	import Warning from '$lib/components/Warning.svelte';
 
 	const CHART_VIEW = 'chart';
 	const TABLE_VIEW = 'table';
@@ -14,7 +20,7 @@
 	let selectedGame = OPTION_ALL.game;
 	let selectedVersion = OPTION_ALL.version;
 	let selectedCountry = OPTION_ALL.country;
-	let dataView = CHART_VIEW;
+	let dataView = TABLE_VIEW;
 
 	const uniqueDataOptions = {
 		gameIds: games.map((game) => game.app_id),
@@ -59,31 +65,63 @@
 
 	$: dataToDisplay = getDataToDisplay(filteredRetentionData);
 
-	// beforeUpdate(() =>
-	// 	console.log('updated')
-	// )
 </script>
 
-<Filters {games} {retention} {filterBy} bind:selectedGame bind:selectedCountry bind:selectedVersion />
+<div class="wrapper">
+	<h1>Filter data</h1>
 
-<div>
-	<h2>VIEW BAR - table or chart option</h2>
-	<button on:click={() => (dataView = TABLE_VIEW)}>Table</button>
-	<button on:click={() => (dataView = CHART_VIEW)}>Chart</button>
-	<p>Showing: {dataView}</p>
+	<Filters
+		{games}
+		{retention}
+		{filterBy}
+		bind:selectedGame
+		bind:selectedCountry
+		bind:selectedVersion
+	/>
+
+	<div class="button-wrapper">
+		<Button 
+			handleClick={() => (dataView = TABLE_VIEW)}
+			selected={dataView === TABLE_VIEW}
+		>
+			Table
+		</Button>
+		<Button 
+			handleClick={() => (dataView = CHART_VIEW)}
+			selected={dataView === CHART_VIEW}
+		>
+			Chart
+		</Button>
+	</div>
+
+	<div class="content-wrapper">
+		{#if selectedGame?.app_id === OPTION_ALL.game.app_id}
+			<Warning 
+				title="! Multiple Games are selected"
+				text="You might see some version and country duplicates, but each of them represents a different game"
+			/>
+		{/if}
+
+		{#if dataView === TABLE_VIEW}
+			<Table retention={dataToDisplay} />
+		{:else}
+			<Chart retention={dataToDisplay} />
+		{/if}
+	</div>
 </div>
 
-<div>
-	<h2>CONTENT</h2>
-	{#if dataView === TABLE_VIEW}
-		<Table 
-			retention={dataToDisplay}
-			multipleGamesSelected={selectedGame.app_id === OPTION_ALL.game.app_id}
-		/>
-	{:else}
-		<Chart
-			retention={dataToDisplay}
-			multipleGamesSelected={selectedGame.app_id === OPTION_ALL.game.app_id}
-		/>
-	{/if}
-</div>
+<style>
+	.wrapper {
+		padding: 24px;
+	}
+
+	.button-wrapper {
+		display: flex;
+		flex-wrap: wrap;
+		margin: 12px 8px;
+	}
+
+	.content-wrapper {
+		margin-top: 36px;
+	}
+</style>

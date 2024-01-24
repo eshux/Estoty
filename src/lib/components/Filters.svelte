@@ -77,38 +77,77 @@
 	};
 </script>
 
-<div>
-	<Svelecte
-		options={gameOptions}
-		bind:value={selectedGame}
-		placeholder="Select Game"
-		labelField="name"
-		valueField="app_id"
-		valueAsObject
-		renderer={(option) => {
-			return getIconOptionMarkup(option.name, option.icon);
-		}}
-	/>
+<div class="wrapper">
+	<div class="select-wrapper">
+		<label for="game">Game</label>
+			<Svelecte
+			inputId="game"
+			options={gameOptions}
+			bind:value={selectedGame}
+			placeholder="Select game"
+			labelField="name"
+			valueField="app_id"
+			valueAsObject
+			renderer={(option) => {
+				return getIconOptionMarkup(option.name, option.icon);
+			}}
+		/>
+	</div>
 
-	<Svelecte
-		options={versionOptions}
-		bind:value={selectedVersion}
-		placeholder="Select Version"
-		labelField="name"
-		valueAsObject
-		renderer={(option) => {
-			return getDeviceOptionMarkup(option.name, versionDevices);
-		}}
-	/>
+	<div class="select-wrapper">
+		<label for="version">Version</label>
+		<Svelecte
+			inputId="version"
+			options={versionOptions}
+			bind:value={selectedVersion}
+			placeholder="Select version"
+			labelField="name"
+			valueAsObject
+			renderer={(option) => {
+				return getDeviceOptionMarkup(option.name, versionDevices);
+			}}
+		/>
+	</div>
 
-	<Svelecte
-		options={countryOptions}
-		bind:value={selectedCountry}
-		placeholder="Select Country"
-		labelField="name"
-		valueAsObject
-		renderer={(option) => {
-			return getDeviceOptionMarkup(option.name, countryDevices);
-		}}
-	/>
+	<div class="select-wrapper">
+		<label for="country">Country</label>
+		<Svelecte
+			inputId="country"
+			options={countryOptions}
+			bind:value={selectedCountry}
+			placeholder="Select country"
+			labelField="name"
+			valueAsObject
+			renderer={(option) => {
+				return getDeviceOptionMarkup(option.name, countryDevices);
+			}}
+		/>
+	</div>
 </div>
+
+<style>
+	.wrapper {
+		display: flex;
+		flex-wrap: wrap;
+		width: 100%;
+	}
+
+	.select-wrapper {
+		flex: 1 1 0;
+		margin: 0 8px;
+		max-width: 100%;
+	}
+
+	label {
+		display: inline-block;
+		margin-bottom: 8px;
+	}
+
+	@media only screen and (max-width: 600px) {
+		.wrapper {
+			display: flex;
+			flex-direction: column;
+			flex-wrap: wrap;
+		}
+	}
+</style>
