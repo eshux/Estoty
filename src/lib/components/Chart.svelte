@@ -89,7 +89,11 @@
 </script>
 
 <div>
-	<canvas use:handleChart={chartConfig} class="chart"></canvas>
+	{#if !data || !data.length}
+		<p>No data</p>
+	{:else}
+		<canvas use:handleChart={chartConfig} class="chart"></canvas>
+	{/if}
 </div>
 
 <style>
