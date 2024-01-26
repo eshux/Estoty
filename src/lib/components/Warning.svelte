@@ -13,7 +13,7 @@
     padding: 12px 16px;
     border-radius: 4px;
     background-color: #ffe6aa;
-    margin: 12px 8px;
+    margin: 0 8px;
   }
 
   .title {

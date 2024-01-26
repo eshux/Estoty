@@ -127,6 +127,10 @@
 			/* first-col width */
 			left: 80px;
 		}
+
+		td, th {
+			padding: 8px;
+		}
 	}
 
 	@media only screen and (max-width: 300px) {

@@ -94,14 +94,16 @@
 		</Button>
 	</div>
 
-	<div class="content-wrapper">
+	<div class="warning-wrapper">
 		{#if selectedGame?.app_id === OPTION_ALL.game.app_id}
 			<Warning 
 				title="! Multiple Games are selected"
-				text="You might see some version and country duplicates, but each of them represents a different game"
+				text="You might see some version and country duplicates, but each of them represents a different game."
 			/>
 		{/if}
+	</div>
 
+	<div class="content-wrapper">
 		{#if dataView === TABLE_VIEW}
 			<Table retention={dataToDisplay} />
 		{:else}
@@ -118,10 +120,16 @@
 	.button-wrapper {
 		display: flex;
 		flex-wrap: wrap;
-		margin: 12px 8px;
+		margin: 12px 8px 4px 8px;
 	}
 
 	.content-wrapper {
-		margin-top: 36px;
+		margin-top: 24px;
+	}
+
+	@media only screen and (max-width: 600px) {
+		.wrapper {
+			padding: 12px;
+		}
 	}
 </style>

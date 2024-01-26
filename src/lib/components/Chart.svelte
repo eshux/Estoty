@@ -37,6 +37,7 @@
 			datasets: data
 		},
 		options: {
+			maintainAspectRatio: false,
 			scales: {
 				y: {
 					beginAtZero: true
@@ -61,6 +62,12 @@
 				},
 				legend: {
 					position: 'right',
+					labels: {
+						useBorderRadius: false,
+						boxWidth: 10,
+						boxHeight: 10,
+						padding: 8
+					},
 					title: {
 						display: true,
 						text: "Versions",
@@ -99,5 +106,12 @@
 <style>
 	.chart {
 		max-height: 600px;
+		min-height: 450px;
+	}
+
+	@media only screen and (max-width: 600px) {
+		.chart {
+			min-height: 300px;
+		}
 	}
 </style>

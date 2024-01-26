@@ -140,7 +140,7 @@
 
 	label {
 		display: inline-block;
-		margin-bottom: 8px;
+		margin: 8px 0;
 	}
 
 	@media only screen and (max-width: 600px) {
